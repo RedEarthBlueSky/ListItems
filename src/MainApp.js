@@ -1,31 +1,47 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ListView, Image, Text }
   from 'react-native';
+import data from './sales.json';
 
-const basketIcon = require('./images/backet.png');
+const basketIcon = require('./images/basket.png');
 
-//  create the class to render the list of Items
-//  keep the items on the state so we can insert and remove easily
 class MainApp extends Component {
   constructor(props) {
     super(props);
+//  class ListView.dataSource implements data processing for list view
     const ds = new ListView.DataSource({
+//  rowHasChanged is a required property, and should be a function
+//  to compare the next element
       rowHasChanged: (r1, r2) => r1 !== r2
     });
 
-    //  the dataSource property defines the array of elements
-    //  we are going to render to the list
     this.state = {
+//  when filling up dataSource with data we need to call
+//  cloneWithRows to send in an array of records
       dataSource: ds.cloneWithRows(data),
     };
   }
 
-  //  used to render individual items
+//  renderRow accepts a function as a value; this function
+//  returns the JSX for each row
   renderRow(record) {
-    // to be defined
+    return (
+      <View style={styles.row} >
+        <View style={styles.iconContainer}>
+          <Image source={basketIcon} style={styles.icon} />
+        </View>
+        <View style={styles.info}>
+          <Text style={styles.items}>{record.items} Items</Text>
+          <Text style={styles.address}>{record.address} </Text>
+        </View>
+        <View style={styles.total}>
+          <Text style={styles.date}>{record.date}>{record.date}</Text>
+          <Text style={styles.price}>${record.total}</Text>
+        </View>
+      </View>
+    );
   }
 
-  //  render method defines the list view component
   render() {
     return (
       <View style={styles.mainContainer}>
@@ -104,3 +120,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default MainApp;
